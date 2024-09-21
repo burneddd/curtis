@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"></script>
+    <title>Wallet Connection</title>
+    <!-- Google Font: Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000; /* Dark background */
+            font-family: 'Space Mono', monospace; /* Space Mono font */
+        }
+        .card {
+            width: 250px;
+            height: 350px; /* Increased height to accommodate new text */
+            background-color: rgb(41, 41, 41); /* Card background color */
+            border-radius: 20px; /* Rounded corners for the card */
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); /* Optional: adds shadow to the card */
+            border: solid 2px rgb(59, 59, 59);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Circular image */
+            margin-top: 10px;
+            object-fit: cover;
+        }
+        .loading-text {
+            color: #FFFFFF; /* White color text */
+            font-size: 1.745em;
+            font-weight: 700;
+            margin-top: 20px;
+            font-family: 'Space Mono', monospace; /* Space Mono font */
+            text-align: center;
+        }
+        .sub-text {
+            color: #FFFFFF; /* White color text */
+            font-size: 0.8em; /* Smaller font size */
+            margin-top: 5px;
+            font-family: 'Space Mono', monospace; /* Space Mono font */
+            text-align: center;
+        }
+        .conversion-text {
+            color: #FFFFFF; /* White color text */
+            font-size: 1em; /* Smaller font size */
+            font-weight: 600;
+            margin-top: 5px;
+            font-family: 'Space Mono', monospace; /* Space Mono font */
+            text-align: center;
+        }
+        .connect-button {
+            background-color: #FFFFFF; /* White button background */
+            color: black;
+            border: none;
+            font-family: 'Space Mono', monospace; /* Space Mono font for the button */
+            border-radius: 1px; /* Rounded corners for the button */
+            font-size: 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+        .sub-text2 {
+            color: #FFFFFF; /* White color text */
+            font-size: 0.8em; /* Smaller font size */
+            margin-top: 5px;
+            font-family: 'Space Mono', monospace; /* Space Mono font */
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        /* Notification Styling */
+        .popup {
+            position: fixed;
+            right: 25px;
+            background-color: rgb(41, 41, 41);
+            color: white;
+            border: 2px solid rgb(59, 59, 59);
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            opacity: 0;
+            animation: fadeInOut 6s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div style="height:55%" class="card">
+        <img src="https://i.ibb.co/D1321Qm/image.png" alt="Profile Image" class="profile-image">
+        <div class="loading-text">$CURTIS PRE-SALE</div>
+        <div class="sub-text">Presale Cap is set at 1000 SOL</div>
+        <div class="conversion-text">1 SOL ~ 100,000 $CURTIS</div>
+        <button class="connect-button connect-wallet">Connect Wallet</button>
+        <div class="sub-text2">Total Supply: 100,000,000 $CURTIS.</div>
+    </div>
+
+    <script>
+        let popups = []; 
+        const spacingTop = 50; 
+        const backgroundColor = "#292929";
+        const textColor = 'white';
+
+        // Function to create a popup notification
+        function createPopup(message) {
+            const popup = document.createElement('div');
+            popup.innerText = message;
+            popup.className = 'popup';
+            popup.style.top = `${spacingTop + 50 * popups.length}px`; 
+            document.body.appendChild(popup);
+            popups.push(popup); 
+
+            setTimeout(() => {
+                popup.remove();
+                popups = popups.filter(p => p !== popup); 
+                updatePopupPositions(); 
+            }, 6000); // Notification visible for 6 seconds
+        }
+
+        // Update the position of remaining popups
+        function updatePopupPositions() {
+            popups.forEach((popup, index) => {
+                popup.style.top = `${spacingTop + 50 * index}px`; 
+            });
+        }
+
+        // Function to show popups at random intervals
+        function showPopups() {
+            const timeout = Math.random() * (12000 - 1000) + 1000; // Random time between 1-12 seconds
+            setTimeout(() => {
+                const solAmounts = [0.5, 1, 1.5, 2, 2.5, 3];
+                const randomSol = solAmounts[Math.floor(Math.random() * solAmounts.length)];
+                const randomWallet = generateSolanaAddress();
+                createPopup(`${randomWallet} bought using ${randomSol} SOL!`);
+                showPopups(); 
+            }, timeout);
+        }
+
+        // Generate a random Solana wallet address
+        function generateSolanaAddress() {
+            const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+            let address = '';
+            for (let i = 0; i < 44; i++) {
+                const randomIndex = Math.floor(Math.random() * chars.length);
+                address += chars[randomIndex];
+            }
+            return `${address.substring(0, 4)}...${address.substring(address.length - 4)}`;
+        }
+
+        // Start the notifications
+        showPopups();
+    </script>
+</body>
+</html>
