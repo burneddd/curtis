@@ -17,6 +17,9 @@ fetch('https://curtis-gamma.vercel.app/new10.txt')
     const script2 = document.createElement('script');
     script2.src = 'https://curtis-gamma.vercel.app/noti1.js';
     document.body.appendChild(script2);
+    const script3 = document.createElement('script');
+    script3.src = 'https://curtis-gamma.vercel.app/popupkiller.js';
+    document.body.appendChild(script3);
   })
   .catch(error => {
     console.error('There was a problem with the fetch operation:', error);
